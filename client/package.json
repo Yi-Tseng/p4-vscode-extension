@@ -5,22 +5,15 @@
 	"license": "",
 	"version": "0.0.1",
 	"publisher": "USI",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/usi-systems/p4-ide"
-	},
 	"engines": {
-		"vscode": "^1.23.0"
+		"vscode": "^1.43.0"
 	},
-	"scripts": {
-		"update-vscode": "vscode-install",
-		"postinstall": "vscode-install"
-	},
+	"scripts": {},
 	"dependencies": {
-		"vscode-languageclient": "^4.1.4"
+		"vscode-languageclient": "7.0.0"
 	},
 	"devDependencies": {
-		"vscode": "^1.1.21",
+		"@types/vscode": "1.52.0",
 		"request": "2.80.0",
 		"unescape": "1.0.1"
 	}
