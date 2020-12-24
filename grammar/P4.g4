@@ -5,7 +5,7 @@ start : program;
 program : input;
 
 input :  /* epsilon */
-	| input declaration 
+	| input declaration
 	| input ';'
 	;
 
@@ -37,7 +37,7 @@ preprocessorLine
 	| PREPROC_LINE
 	;
 
-ppIncludeFileName 
+ppIncludeFileName
 	: STRING_LITERAL
 	| '<' ppIncludeFileName '>'
 	| name
@@ -51,10 +51,10 @@ nonTypeName
     : type_or_id
     | APPLY
     | KEY
-    | ACTIONS     
-    | STATE     
-    | ENTRIES     
-    | TYPE     
+    | ACTIONS
+    | STATE
+    | ENTRIES
+    | TYPE
     ;
 
 name
@@ -76,8 +76,8 @@ optCONST
     ;
 
 optAnnotations
-    : /* empty */ 
-    | annotations 
+    : /* empty */
+    | annotations
     ;
 
 annotations
@@ -98,53 +98,53 @@ annotationBody
     ;
 
 annotationToken
-    : UNEXPECTED_TOKEN 
-    | ABSTRACT         
-    | ACTION           
-    | ACTIONS          
-    | APPLY            
-    | BOOL             
-    | BIT              
-    | CONST            
-    | CONTROL          
-    | DEFAULT          
-    | ELSE             
-    | ENTRIES          
-    | ENUM             
-    | ERROR            
-    | EXIT             
-    | EXTERN           
-    | FALSE            
-    | HEADER           
-    | HEADER_UNION     
-    | IF               
-    | IN               
-    | INOUT            
-    | INT              
-    | KEY              
-    | MATCH_KIND       
-    | TYPE             
-    | OUT              
-    | PARSER           
-    | PACKAGE          
-    | PRAGMA           
-    | RETURN           
-    | SELECT           
-    | STATE            
-    | STRUCT           
-    | SWITCH           
-    | TABLE            
-    | THIS             
-    | TRANSITION       
-    | TRUE             
-    | TUPLE            
-    | TYPEDEF          
-    | VARBIT           
-    | VALUESET         
-    | VOID             
-    | '_'              
+    : UNEXPECTED_TOKEN
+    | ABSTRACT
+    | ACTION
+    | ACTIONS
+    | APPLY
+    | BOOL
+    | BIT
+    | CONST
+    | CONTROL
+    | DEFAULT
+    | ELSE
+    | ENTRIES
+    | ENUM
+    | ERROR
+    | EXIT
+    | EXTERN
+    | FALSE
+    | HEADER
+    | HEADER_UNION
+    | IF
+    | IN
+    | INOUT
+    | INT
+    | KEY
+    | MATCH_KIND
+    | TYPE
+    | OUT
+    | PARSER
+    | PACKAGE
+    | PRAGMA
+    | RETURN
+    | SELECT
+    | STATE
+    | STRUCT
+    | SWITCH
+    | TABLE
+    | THIS
+    | TRANSITION
+    | TRUE
+    | TUPLE
+    | TYPEDEF
+    | VARBIT
+    | VALUESET
+    | VOID
+    | '_'
 
-    | type_or_id      
+    | type_or_id
     // | TYPE_IDENTIFIER
     | STRING_LITERAL
     | INTEGER
@@ -160,39 +160,39 @@ annotationToken
     | '<='
     | '++'
 
-    | '+' 
+    | '+'
     | '|+|'
-    | '-' 
+    | '-'
     | '|-|'
-    | '*' 
-    | '/' 
-    | '%' 
+    | '*'
+    | '/'
+    | '%'
 
-    | '|' 
-    | '&' 
-    | '^' 
-    | '~' 
+    | '|'
+    | '&'
+    | '^'
+    | '~'
 
     // Omit parens. These are handled in annotationBody, since they must be
     // balanced.
-    // | '(' 
-    // | ')' 
+    // | '('
+    // | ')'
 
-    | '[' 
-    | ']' 
-    | '{' 
-    | '}' 
-    | '<' 
-    | '>' 
+    | '['
+    | ']'
+    | '{'
+    | '}'
+    | '<'
+    | '>'
 
-    | '!' 
-    | ':' 
-    | ',' 
-    | '?' 
-    | '.' 
-    | '=' 
-    | ';' 
-    | '@' 
+    | '!'
+    | ':'
+    | ','
+    | '?'
+    | '.'
+    | '='
+    | ';'
+    | '@'
     ;
 
 kvList
@@ -232,7 +232,7 @@ packageTypeDeclaration
       '(' parameterList ')'
     ;
 
-instantiation	
+instantiation
 	: annotations typeRef '(' argumentList ')' name ';'
 	| typeRef '(' argumentList ')' name ';'
 	/* experimental */
@@ -256,7 +256,7 @@ objDeclaration
     ;
 
 optConstructorParameters
-    : /* empty */ 
+    : /* empty */
     | '(' parameterList ')'
     ;
 
@@ -295,7 +295,7 @@ parserState
     ;
 
 parserStatements
-    : /* empty */ 
+    : /* empty */
     | parserStatements parserStatement
     ;
 
@@ -374,7 +374,7 @@ controlTypeDeclaration
         optTypeParameters
         '(' parameterList ')'
 	;
-	
+
 controlLocalDeclarations
     : /* empty */
     | controlLocalDeclarations controlLocalDeclaration
@@ -398,7 +398,7 @@ externDeclaration
         optTypeParameters
         '{' methodPrototypes '}'
     | optAnnotations EXTERN functionPrototype ';'
-    | optAnnotations EXTERN name ';' 
+    | optAnnotations EXTERN name ';'
     ;
 
 methodPrototypes
@@ -681,7 +681,7 @@ actionList
     ;
 
 actionRef
-    : optAnnotations name 
+    : optAnnotations name
     | optAnnotations name '(' argumentList ')'
     ;
 
@@ -770,8 +770,8 @@ expression
     | dotPrefix nonTypeName
     | expression '[' expression ']'
     | expression '[' expression ':' expression ']'
-    | '{' expressionList '}' 
-    | '(' expression ')' 
+    | '{' expressionList '}'
+    | '(' expression ')'
     | '!' expression //%prec PREFIX
     | '~' expression //%prec PREFIX
     | '-' expression //%prec PREFIX
@@ -806,7 +806,7 @@ expression
     // precedence weaker than casts.  There is no easy way to fix this in bison.
     | expression '(' argumentList ')'
     | namedType '(' argumentList ')'
-	| '(' typeRef ')' expression // %prec PREFIX 
+	| '(' typeRef ')' expression // %prec PREFIX
     ;
 
 
