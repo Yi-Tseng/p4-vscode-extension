@@ -12,7 +12,9 @@ import {
 	CompletionItem,
 	Connection,
 	DidChangeConfigurationNotification,
+	TextDocumentSyncKind,
 } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument'
 import { sendToRemoteServer } from './remote_compiler_proxy' ;
 import { sendToAntlrCompiler } from './antlr_compiler_proxy';
 import { P4ExtensionSettings } from './p4_extension_setting';
@@ -21,7 +23,7 @@ import { getDocumentSettings } from './utils';
 import { completionProvider } from './providers/CompletionProvider';
 import { highlightProvider } from './providers/DocumentHighlightProvider';
 
-let connection = createConnection(ProposedFeatures.all);
+let connection = createConnection(null, null, ProposedFeatures.all);
 let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
 
@@ -29,11 +31,11 @@ export let documentSettings: Map<string, Thenable<P4ExtensionSettings>> = new Ma
 
 class Server {
 	public connection: Connection;
-	public documents: TextDocuments;
+	public documents: TextDocuments<TextDocument>;
 
 	constructor(connection: Connection) {
 		this.connection = connection;
-		this.documents = new TextDocuments();
+		this.documents = new TextDocuments(TextDocument);
 
 		this.initializeConnection();
 		this.initializeDocuments();
@@ -54,7 +56,7 @@ class Server {
 		this.connection.onDidChangeWatchedFiles(_change => {
 			logDebug('We received an file change event');
 		});
-		
+
 		this.connection.onDidOpenTextDocument((params) => {
 			// A text document got opened in VSCode.
 			// params.uri uniquely identifies the document. For documents store on disk this is a file URI.
@@ -73,16 +75,16 @@ class Server {
 			logInfo(`${params.textDocument.uri} closed.`);
 		});
 	}
-	
+
 	private initializeConnection(){
 		this.connection.onInitialize((params: InitializeParams) => {
 			let capabilities = params.capabilities;
 			hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
 			hasWorkspaceFolderCapability = !!(capabilities.workspace && !!capabilities.workspace.workspaceFolders);
-		
+
 			return {
 				capabilities: {
-					textDocumentSync: this.documents.syncKind,
+					textDocumentSync: TextDocumentSyncKind.Incremental,
 					completionProvider: {
 						resolveProvider: true,
 						triggerCharacters: ["<", ">", "."]
@@ -111,7 +113,7 @@ class Server {
 
 		this.connection.onDidChangeConfiguration(async change => {
 			// let mySetting = await getDocument\Settings();
-		
+
 			this.documents.all().forEach(sendToRemoteServer);
 			this.documents.all().forEach(sendToAntlrCompiler);
 		});
